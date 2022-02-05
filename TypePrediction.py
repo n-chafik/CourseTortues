@@ -76,3 +76,5 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
 #        print("cycle  : ", is_cyclic(i, "large"))
 
 print(table_speed(0, "small"))
+print(is_regular(0,"small")) # in this case it returns false ( which is not ) because there has been a delay while getting the data
+print(is_cyclic(0,"small"))
