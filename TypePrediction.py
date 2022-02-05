@@ -5,7 +5,7 @@ import os.path
 
 # Function that returns the speeds recorded between every two Tops
 
-def table_speed(id_tortoise, type_of_race):
+def table_speed(id_tortoise, type_of_race="tiny"):
     list_positions = []
     list_speeds = []
     # Count the number of archives we made
@@ -29,8 +29,8 @@ def table_speed(id_tortoise, type_of_race):
     return list_speeds
 
 
-def is_regular(id_tortoise):
-    speed = table_speed(id_tortoise)
+def is_regular(id_tortoise, type_of_race="tiny"):
+    speed = table_speed(id_tortoise, type_of_race)
     pas = speed[0]
     i = 1
     while i < len(speed):
@@ -42,7 +42,7 @@ def is_regular(id_tortoise):
     return True
 
 
-def is_cyclic(id_tortoise, type_of_race):
+def is_cyclic(id_tortoise, type_of_race="tiny"):
     speed = table_speed(id_tortoise, type_of_race)
     # speed = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7]
     first_element = speed[0]
@@ -69,8 +69,12 @@ def is_cyclic(id_tortoise, type_of_race):
         return window
 
 
-for i in range(1000, 1500):
-    if isinstance(is_cyclic(i, "large"), list):
-        print("Id tortoise : ", i)
-        print("speed : ", table_speed(i, "large"))
-        print("cycle  : ", is_cyclic(i, "large"))
+# for i in range(1000, 1500):
+#    if isinstance(is_cyclic(i, "large"), list):
+#        print("Id tortoise : ", i)
+#        print("speed : ", table_speed(i, "large"))
+#        print("cycle  : ", is_cyclic(i, "large"))
+
+print(table_speed(0, "small"))
+print(is_regular(0,"small")) # in this case it returns false ( which is not ) because there has been a delay while getting the data
+print(is_cyclic(0,"small"))
