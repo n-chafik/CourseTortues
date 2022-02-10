@@ -10,11 +10,11 @@ def table_speed(id_tortoise, type_of_race="tiny"):
     list_speeds = []
     # Count the number of archives we made
     number_of_files = len(
-        [name for name in os.listdir('./' + type_of_race)])
+        [name for name in os.listdir('./raw_data/' + type_of_race)])
     # This loop go into all the files, extract the positions of a given tortoise
     for i in range(number_of_files):
         file_name = "archive" + str(i + 1) + ".json"
-        with open(type_of_race + "/" + file_name, 'r') as f:
+        with open('./raw_data/'+type_of_race + "/" + file_name, 'r') as f:
             data = json.load(f)
             for tortoise in data['tortoises']:
                 if tortoise['id'] == id_tortoise:
@@ -74,7 +74,5 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
 #        print("Id tortoise : ", i)
 #        print("speed : ", table_speed(i, "large"))
 #        print("cycle  : ", is_cyclic(i, "large"))
-
-print(table_speed(0, "small"))
-print(is_regular(0,"small")) # in this case it returns false ( which is not ) because there has been a delay while getting the data
-print(is_cyclic(0,"small"))
+print(table_speed(3))
+print(is_cyclic(3,"tiny"))

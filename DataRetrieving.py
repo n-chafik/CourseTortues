@@ -17,9 +17,11 @@ def retrieving_infos(n):
         "tiny": [],
     }
 
-    for loop in range(1, n):
-        try:
-            for type_of_race in ['large', 'medium', 'small', 'tiny']:
+    for type_of_race in ['large', 'medium', 'small', 'tiny']:
+        loop = 1
+        print(type_of_race)
+        while loop < n:
+            try:
                 # get information from cluster
                 response = requests.get(url + type_of_race)
                 data = response.json()
@@ -34,16 +36,17 @@ def retrieving_infos(n):
                     with open("./raw_data/" + type_of_race + "/" + file_name, "w") as outfile:
                         outfile.write(json_object)
                         previous_data[type_of_race] = data
-                    print("Archiving in file ", loop, " ", datetime.now())
+                        print("Archiving in file ", loop, " ", datetime.now(), " in ", type_of_race)
+                    loop = loop + 1
                 else:
                     print("File already downloaded")
-                    break
-
-            time.sleep(2.5)
-        except Exception as e:
-            print("An error have occured : ", e)
+                time.sleep(2.5)
+            except:
+                print("An error have occured : ")
 
 
 def group_data_by_id():
     pass
 
+
+retrieving_infos(100)
