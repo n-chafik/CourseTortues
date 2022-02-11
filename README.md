@@ -2,16 +2,16 @@
 
 
 
-Participant au projet : (ajouter les noms de famille, je les ai pas !!!)
+Participant au projet :
 
 
-- Imane
+- Imane Tazi
 
 
-- Naoufel
+- Naoufel Chafik
 
 
-- Manale
+- Manale Essajidi
 
 
 - Lucas Ruston
