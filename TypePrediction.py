@@ -29,6 +29,7 @@ def table_speed(id_tortoise, type_of_race="tiny"):
 
     return list_speeds
 
+
 def plot_tortoise(id_tortoise, type_of_race):
     speed = table_speed(id_tortoise, type_of_race)
 
@@ -38,22 +39,17 @@ def plot_tortoise(id_tortoise, type_of_race):
     plt.ylabel('Time')
     plt.show()
 
+
 def is_regular(id_tortoise, type_of_race="tiny"):
     speed = table_speed(id_tortoise, type_of_race)
-    pas = speed[0]
-    i = 1
-    while i < len(speed):
-        if speed[i] != pas:
-            print(speed[i], pas)
-            return False
-        i = i + 1
-
-    return True
+    if max(speed) == min(speed):
+        return True, {"step": speed[0]}
+    else:
+        return False, {}
 
 
 def is_cyclic(id_tortoise, type_of_race="tiny"):
     speed = table_speed(id_tortoise, type_of_race)
-    # speed = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7]
     first_element = speed[0]
     window = [first_element]
     position = None
@@ -80,8 +76,6 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
 
 def is_tired(id_tortoise, type_of_race="tiny"):
 
-    if not is_regular(id_tortoise, type_of_race):
-
         speeds = table_speed(id_tortoise, type_of_race)
         table_accelerations = []
         for i in range(len(speeds) - 1):
@@ -93,6 +87,47 @@ def is_tired(id_tortoise, type_of_race="tiny"):
                    table_accelerations[0]
         else:
             return False
+
+def is_lunatic(id_tortoise,type_of_race="tiny"):
+    return True,{}
+
+def model():
+    data_model = {"large":[],"tiny":[],"small":[],"medium":[]}
+    length = {"large":2000, "medium":500, "small":100,"tiny":10}
+    for Type in ["large", "medium", "small", "tiny"]:
+        for tortoise in range(length[Type]):
+            (is_regular_bool,params) = is_regular(tortoise,Type)
+            if is_regular_bool:
+                data_model[Type].append({"class":0,"params":params})
+                break
+
+            (is_tired_bool, params) = is_tired(tortoise, Type)
+            if is_tired_bool:
+                data_model[Type].append({"class": 1, "params": params})
+                break
+
+            (is_cyclic_bool, params) = is_cyclic(tortoise, Type)
+            if is_cyclic_bool:
+                data_model[Type].append({"class": 2, "params": params})
+                break
+
+            (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
+            if is_lunatic_bool:
+                data_model[Type].append({"class": 3, "params": params})
+                break
+
+        with open('./model.json','w') as f:
+            f.write(json.dumps(data_model))
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     # print(table_speed(10, "medium"))

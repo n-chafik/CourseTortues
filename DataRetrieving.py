@@ -47,8 +47,5 @@ def retrieving_infos(n):
             print("An error have occured : ", e)
 
 
-def group_data_by_id():
-    pass
-
 if __name__ == "__main__":
-    retrieving_infos(600)
+    retrieving_infos(24 * 20 * 60)
