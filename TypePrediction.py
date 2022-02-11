@@ -33,7 +33,7 @@ def plot_tortoise(id_tortoise, type_of_race):
     speed = table_speed(id_tortoise, type_of_race)
 
     plt.plot(speed)
-    plt.title('Tortoise {} in the {} race ({} measures)'.format(id, type_of_race, len(speed)))
+    plt.title('Tortoise {} in the {} race ({} measures)'.format(id_tortoise, type_of_race, len(speed)))
     plt.xlabel('Distance')
     plt.ylabel('Time')
     plt.show()
