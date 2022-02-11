@@ -14,7 +14,7 @@ def table_speed(id_tortoise, type_of_race="tiny"):
     # This loop go into all the files, extract the positions of a given tortoise
     for i in range(number_of_files):
         file_name = "archive" + str(i + 1) + ".json"
-        with open('./raw_data/'+type_of_race + "/" + file_name, 'r') as f:
+        with open('./raw_data/' + type_of_race + "/" + file_name, 'r') as f:
             data = json.load(f)
             for tortoise in data['tortoises']:
                 if tortoise['id'] == id_tortoise:
@@ -69,10 +69,24 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
         return window
 
 
-# for i in range(1000, 1500):
-#    if isinstance(is_cyclic(i, "large"), list):
-#        print("Id tortoise : ", i)
-#        print("speed : ", table_speed(i, "large"))
-#        print("cycle  : ", is_cyclic(i, "large"))
-print(table_speed(3))
-print(is_cyclic(3,"tiny"))
+def is_tired(id_tortoise, type_of_race="tiny"):
+
+    if not is_regular(id_tortoise, type_of_race):
+
+        speeds = table_speed(id_tortoise, type_of_race)
+        table_accelerations = []
+        for i in range(len(speeds) - 1):
+            table_accelerations.append(abs(speeds[i + 1] - speeds[i]))
+
+        size = len(list(set(table_accelerations)))
+        if size == 2 or size == 1:
+            return 'Tortoise  Tired,  initial : ', max(speeds), '  rhythm  :  ', \
+                   table_accelerations[0]
+        else:
+            return False
+
+
+# print(table_speed(10, "medium"))
+# print(is_cyclic(10, "medium"))
+print(is_tired(1, "tiny"))
+# print(is_regular(10, "medium"))
