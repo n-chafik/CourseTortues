@@ -97,6 +97,6 @@ def is_tired(id_tortoise, type_of_race="tiny"):
 if __name__ == "__main__":
     # print(table_speed(10, "medium"))
     # print(is_cyclic(10, "medium"))
-    print(is_tired(1, "tiny"))
-    plot_tortoise(1, 'tiny')
+    # print(is_tired(1, "tiny"))
+    plot_tortoise(9, 'tiny')
     # print(is_regular(10, "medium"))

@@ -5,7 +5,6 @@ import time
 from datetime import datetime
 
 stop = False
-n = 30
 url = "http://tortues.ecoquery.os.univ-lyon1.fr/race/"
 
 
@@ -17,11 +16,10 @@ def retrieving_infos(n):
         "tiny": [],
     }
 
-    for type_of_race in ['large', 'medium', 'small', 'tiny']:
-        loop = 1
-        print(type_of_race)
-        while loop < n:
-            try:
+    i = 1
+    while i <= n:
+        try:
+            for type_of_race in ['tiny', 'large', 'medium', 'small']:
                 # get information from cluster
                 response = requests.get(url + type_of_race)
                 data = response.json()
@@ -32,21 +30,25 @@ def retrieving_infos(n):
                     json_object = json.dumps(data, indent=4)
 
                     # Archiving information
-                    file_name = "archive" + str(loop) + ".json"
+                    file_name = "archive" + str(i) + ".json"
                     with open("./raw_data/" + type_of_race + "/" + file_name, "w") as outfile:
                         outfile.write(json_object)
                         previous_data[type_of_race] = data
-                        print("Archiving in file ", loop, " ", datetime.now(), " in ", type_of_race)
-                    loop = loop + 1
+                    print("Archiving in file ", i, " ", datetime.now())
                 else:
                     print("File already downloaded")
-                time.sleep(2.5)
-            except:
-                print("An error have occured : ")
+                    i -= 1
+                    break
+            i += 1
+            time.sleep(1)
+            # This sleep time depends of the internet connection and the computer.
+            # On slow computer reduce it.
+        except Exception as e:
+            print("An error have occured : ", e)
 
 
 def group_data_by_id():
     pass
 
-
-retrieving_infos(100)
+if __name__ == "__main__":
+    retrieving_infos(600)
