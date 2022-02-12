@@ -61,77 +61,79 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
             break
 
     if position == 1 or position is None:
-        return "pas de cycles"
+        return False, {}
     else:
         for j in range(1, position - 1):
             try:
 
                 if speed[j] != speed[j + position]:
-                    return "pas de cycles"
+                    return False, {}
             except:
-                return "Maybe Cyclic"
+                return True, {"window": window}
 
-        return window
+        return True, {"window": window}
 
 
 def is_tired(id_tortoise, type_of_race="tiny"):
-
-        speeds = table_speed(id_tortoise, type_of_race)
-        table_accelerations = []
+    speeds = table_speed(id_tortoise, type_of_race)
+    table_accelerations = []
+    if speeds[0] != speeds[1]:
         for i in range(len(speeds) - 1):
             table_accelerations.append(abs(speeds[i + 1] - speeds[i]))
 
         size = len(list(set(table_accelerations)))
         if size == 2 or size == 1:
-            return 'Tortoise  Tired,  initial : ', max(speeds), '  rhythm  :  ', \
-                   table_accelerations[0]
+            return True, {"initial": max(speeds), "rhythm": table_accelerations[0]}
         else:
-            return False
+            return False, {}
+    else:
+        return False, {}
 
-def is_lunatic(id_tortoise,type_of_race="tiny"):
-    return True,{}
+
+def is_lunatic(id_tortoise, type_of_race="tiny"):
+    return True, {}
+
 
 def model():
-    data_model = {"large":[],"tiny":[],"small":[],"medium":[]}
-    length = {"large":2000, "medium":500, "small":100,"tiny":10}
-    for Type in ["large", "medium", "small", "tiny"]:
+    print("start making the model")
+    data_model = {"large": [], "tiny": [], "small": [], "medium": []}
+    length = {"large": 2000, "medium": 500, "small": 100, "tiny": 10}
+    for Type in ["tiny", "small", "medium", "large"]:
+        print("Type of race", Type)
         for tortoise in range(length[Type]):
-            (is_regular_bool,params) = is_regular(tortoise,Type)
+            print("Tortoise : ", tortoise)
+            (is_regular_bool, params) = is_regular(tortoise, Type)
+
             if is_regular_bool:
-                data_model[Type].append({"class":0,"params":params})
-                break
+                data_model[Type].append({"Tortoise": tortoise, "class": 0, "params": params})
 
-            (is_tired_bool, params) = is_tired(tortoise, Type)
-            if is_tired_bool:
-                data_model[Type].append({"class": 1, "params": params})
-                break
+            else:
+                (is_tired_bool, params) = is_tired(tortoise, Type)
+                if is_tired_bool:
+                    data_model[Type].append({"Tortoise": tortoise, "class": 1, "params": params})
 
-            (is_cyclic_bool, params) = is_cyclic(tortoise, Type)
-            if is_cyclic_bool:
-                data_model[Type].append({"class": 2, "params": params})
-                break
+                else:
+                    (is_cyclic_bool, params) = is_cyclic(tortoise, Type)
+                    if is_cyclic_bool:
+                        data_model[Type].append({"Tortoise": tortoise, "class": 2, "params": params})
+                        (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
 
-            (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
-            if is_lunatic_bool:
-                data_model[Type].append({"class": 3, "params": params})
-                break
+                    else:
+                        if is_lunatic_bool:
+                            data_model[Type].append({"Tortoise": tortoise, "class": 3, "params": params})
 
-        with open('./model.json','w') as f:
-            f.write(json.dumps(data_model))
-
-
-
-
-
-
-
-
-
+    with open('./model.json', 'w') as f:
+        f.write(json.dumps(data_model, indent=4))
 
 
 if __name__ == "__main__":
     # print(table_speed(10, "medium"))
     # print(is_cyclic(10, "medium"))
     # print(is_tired(1, "tiny"))
-    plot_tortoise(9, 'tiny')
+    # plot_tortoise(9, 'tiny')
     # print(is_regular(10, "medium"))
+
+    #model()
+    print(table_speed(0,"large"))
+    print(is_cyclic(0, "large"))
+
