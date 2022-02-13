@@ -17,17 +17,20 @@ def table_speed(id_tortoise, type_of_race="tiny"):
         file_name = "archive" + str(i + 1) + ".json"
         with open('./raw_data/' + type_of_race + "/" + file_name, 'r') as f:
             data = json.load(f)
+            quality = data["qualite"]
+            temperature = data["temperature"]
             for tortoise in data['tortoises']:
                 if tortoise['id'] == id_tortoise:
                     # Get the position of this tortoise from each file ( every 1 top )
                     list_positions.append(tortoise['position'])
+
             f.close()
 
     for i in range(len(list_positions) - 1):
         # calculate the speeds recorded from the positions
         list_speeds.append(list_positions[i + 1] - list_positions[i])
 
-    return list_speeds
+    return list_speeds, {"qualite": quality, "temperature": temperature}
 
 
 def plot_tortoise(id_tortoise, type_of_race):
@@ -41,15 +44,16 @@ def plot_tortoise(id_tortoise, type_of_race):
 
 
 def is_regular(id_tortoise, type_of_race="tiny"):
-    speed = table_speed(id_tortoise, type_of_race)
+    speed = table_speed(id_tortoise, type_of_race)[0]
+    extra_params = table_speed(id_tortoise, type_of_race)[1]
     if max(speed) == min(speed):
-        return True, {"step": speed[0]}
+        return True, {"step": speed[0], "extra_params": extra_params}
     else:
         return False, {}
 
 
 def is_cyclic(id_tortoise, type_of_race="tiny"):
-    speed = table_speed(id_tortoise, type_of_race)
+    speed, extra_params = table_speed(id_tortoise, type_of_race)[0], table_speed(id_tortoise, type_of_race)[1]
     first_element = speed[0]
     window = [first_element]
     position = None
@@ -71,11 +75,11 @@ def is_cyclic(id_tortoise, type_of_race="tiny"):
             except:
                 return True, {"window": window}
 
-        return True, {"window": window}
+        return True, {"window": window, "extra_params": extra_params}
 
 
 def is_tired(id_tortoise, type_of_race="tiny"):
-    speeds = table_speed(id_tortoise, type_of_race)
+    speeds, extra_params = table_speed(id_tortoise, type_of_race)[0], table_speed(id_tortoise, type_of_race)[1]
     table_accelerations = []
     if speeds[0] != speeds[1]:
         for i in range(len(speeds) - 1):
@@ -83,7 +87,7 @@ def is_tired(id_tortoise, type_of_race="tiny"):
 
         size = len(list(set(table_accelerations)))
         if size == 2 or size == 1:
-            return True, {"initial": max(speeds), "rhythm": table_accelerations[0]}
+            return True, {"initial": max(speeds), "rhythm": table_accelerations[0], "extra_params": extra_params}
         else:
             return False, {}
     else:
@@ -119,21 +123,15 @@ def model():
                         (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
 
                     else:
-                        if is_lunatic_bool:
-                            data_model[Type].append({"Tortoise": tortoise, "class": 3, "params": params})
+                        # if is_lunatic_bool:
+                        data_model[Type].append({"Tortoise": tortoise, "class": 3, "params": params})
 
     with open('./model.json', 'w') as f:
         f.write(json.dumps(data_model, indent=4))
 
 
 if __name__ == "__main__":
-    # print(table_speed(10, "medium"))
-    # print(is_cyclic(10, "medium"))
-    # print(is_tired(1, "tiny"))
-    # plot_tortoise(9, 'tiny')
-    # print(is_regular(10, "medium"))
 
-    #model()
-    print(table_speed(0,"large"))
-    print(is_cyclic(0, "large"))
+    model()
+
 
