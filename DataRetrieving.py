@@ -48,4 +48,4 @@ def retrieving_infos(n):
 
 
 if __name__ == "__main__":
-    retrieving_infos(24 * 20 * 60)
+    retrieving_infos(2 * 20 * 60)
