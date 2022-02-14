@@ -1,4 +1,5 @@
 import json
+import argparse
 
 
 def prediction2(Type, top, pos1, pos2, pos3, temp, quality, delta_top, parameters):
@@ -38,15 +39,15 @@ def prediction_tired(initial, rhythm, pos1, pos2, pos3, delta_top):
     speeds = [0]
     if initial % rhythm == 0:
         for i in range(initial / rhythm):
-            speeds.append(rhythm * (i+1))
-        for i in range(initial/rhythm, 1, -1):
-            speeds.append(rhythm * (i-1))
+            speeds.append(rhythm * (i + 1))
+        for i in range(initial / rhythm, 1, -1):
+            speeds.append(rhythm * (i - 1))
     else:
         for i in range(int(initial / rhythm)):
-            speeds.append(rhythm * (i+1))
+            speeds.append(rhythm * (i + 1))
         speeds.append(initial)
-        for i in range(1, (int(initial/rhythm))+1):
-            speeds.append(initial - (rhythm*i))
+        for i in range(1, (int(initial / rhythm)) + 1):
+            speeds.append(initial - (rhythm * i))
 
     accelerations = []
     current_speed = 0
@@ -59,15 +60,6 @@ def prediction_tired(initial, rhythm, pos1, pos2, pos3, delta_top):
         accelerations.append(speeds[(current_speed + i) % len(speeds)])
 
     return pos1 + sum(accelerations)
-
-
-
-
-
-
-
-
-    return
 
 
 def prediction_lunatic():
@@ -89,6 +81,27 @@ def prediction(course, id, top, pos1, pos2, pos3, temp, quality, delta_top):
                         return prediction2(Type, top, pos1, pos2, pos3, temp, quality, delta_top, parameters)
 
 
-# print(prediction("tiny", 0, 848157, 71245188, 71245272, 71245356, 24.174806498112467, 0.3100529516794682, 90293))
-# print(prediction("tiny", 3, 848157, 181263227, 181263510, 181263603, 0.3100529516794682, 24.174806498112467, 92670))
-# print(prediction("large", 12, 847861, 160245918, 160246266, 160246584, 20.980595977843635, 0.863381793014835, 123169))
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Calculate tortoise postion based on provided data')
+    parser.add_argument(
+        'course',
+        type=str,
+        choices=['tiny', 'small', 'medium', 'large'],
+        help='Type of course'
+    )
+    parser.add_argument('id', type=int, help='Id of the tortoise')
+    parser.add_argument('top', type=int, help='Current top')
+    parser.add_argument('pos1', type=int, help='First position')
+    parser.add_argument('pos2', type=int, help='Second position')
+    parser.add_argument('pos3', type=int, help='Third position')
+    parser.add_argument('temp', type=float, help='Temperature')
+    parser.add_argument('qual', type=float, help='Quality of the food')
+    parser.add_argument('deltatop', type=int, help='Delta top')
+
+    args = vars(parser.parse_args())
+
+    print(prediction(args['course'], args['id'], args['top'], args['pos1'], args['pos2'], args['pos3'], args['temp'],
+                     args['qual'], args['deltatop']))
+
+    # Example command :
+    # python PositionPrediction.py "tiny" 3 848157 181263227 181263510 181263603 0.3100529516794682 24.174806498112467 92670
