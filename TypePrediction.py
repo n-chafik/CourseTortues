@@ -140,9 +140,10 @@ def model():
                     (is_cyclic_bool, params) = is_cyclic(speed)
                     if is_cyclic_bool:
                         data_model[Type].append({"Tortoise": tortoise, "class": 2, "params": params})
-                        (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
+
 
                     else:
+                        (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
                         # if is_lunatic_bool:
                         data_model[Type].append({"Tortoise": tortoise, "class": 3, "params": params})
 

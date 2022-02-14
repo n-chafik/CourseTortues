@@ -37,16 +37,29 @@ def prediction_cyclic(window, pos1, pos2, pos3, delta_top):
 
 def prediction_tired(initial, rhythm, pos1, pos2, pos3, delta_top):
     speeds = [0]
-    if initial % rhythm > 0:
-        #for i in range(initial / rhythm):
-        #    speeds.append((i + 1) * rhythm)
+    if initial % rhythm == 0:
+        for i in range(initial / rhythm):
+            speeds.append(rhythm * (i + 1))
+        for i in range(initial / rhythm, 1, -1):
+            speeds.append(rhythm * (i - 1))
+    else:
+        for i in range(int(initial / rhythm)):
+            speeds.append(rhythm * (i + 1))
+        speeds.append(initial)
+        for i in range(1, (int(initial / rhythm)) + 1):
+            speeds.append(initial - (rhythm * i))
 
-        for i in range(initial):
-            speeds.append(rhythm)
-        # A complèter
+    accelerations = []
+    current_speed = 0
+    for i in range(len(speeds)):
+        if speeds[i] == pos2 - pos1:
+            current_speed = i
+            break
 
+    for i in range(delta_top):
+        accelerations.append(speeds[(current_speed + i) % len(speeds)])
 
-    return
+    return pos1 + sum(accelerations)
 
 
 def prediction_lunatic(pos1, pos2, pos3, temp, quality, delta_top, parameters):
@@ -111,7 +124,8 @@ if __name__ == "__main__":
 
     args = vars(parser.parse_args())
 
-    print(prediction(args['course'], args['id'], args['top'], args['pos1'], args['pos2'], args['pos3'], args['temp'], args['qual'], args['deltatop']))
+    print(prediction(args['course'], args['id'], args['top'], args['pos1'], args['pos2'], args['pos3'], args['temp'],
+                     args['qual'], args['deltatop']))
 
     # Example command :
     # python PositionPrediction.py "tiny" 3 848157 181263227 181263510 181263603 0.3100529516794682 24.174806498112467 92670
