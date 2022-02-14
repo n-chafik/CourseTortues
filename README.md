@@ -16,7 +16,7 @@ Participant au projet :
 
 - Lucas Ruston
 
-Ce programme a été testé sur le compte p2113357. 
+Ce programme a été testé sur le compte p2113357, adresse ip : 192.168.76.141 . 
 
 ## Introduction
 
