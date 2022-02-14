@@ -91,6 +91,7 @@ On effectue tout d'abord une dérivée discrète par rapport au temps des coordo
 
 ### Les tortues fatiguées
 
+![Tortues fatiguées](./images/tired.png)
 
 On vérifie tout d'abord que la tortue n'est pas une tortue régulière. Ensuite, on réalise la dérivée discrète seconde par rapport au temps afin d'obtenir l'accélération par rapport au temps.
 
@@ -102,17 +103,16 @@ La valeur de l'accélération doit prendre un nombre de valeurs compris entre 2 
 
 ### Les tortues cycliques
 
+![Tortues cycliques](./images/cyclic.png)
 
 Par convention, on vérifie tout d'abord les 2 autres comportements avant de vérifier si une tortue est cyclique. Il aurait pu être possible de simplifier les modèles et considérer que les 2 autres cas sont également des tortues cycliques, mais cela ne sera pas fait dans ce TP en raison de l'énoncé.
 
-
-
-Implémentation ????
-
+Pour détecter ces tortues, on itère sur les vitesses jusqu'à se retrouver dans une boucle. 
 
 
 ### Les tortues lunatiques
 
+![Tortues lunatiques](./images/lunatic.png)
 
 Les tortues lunatiques sont des tortues dont le comportement change en fonction de la qualité du repas et de la température. La première étape est donc de diviser les données pour déterminer sur chaque intervalle de température et de qualité de repas constant, les paramètres de chacun de ces comportements. Pour cela, les 3 précédents modèles de comportement seront utilisés.
 
@@ -126,31 +126,70 @@ Ensuite, il faut déterminer quel comportement la tortue adopte en fonction de l
 
 - Régression logistique : C'est un modèle de régression binomiale qui va découper l'espace selon des hyper-plans (qui seront ici des droites) et va ainsi permettre de déterminer des zones pour chaque modèle de comportement.
 
-### Le fichier model.json
+Dans notre cas, nous utiliseront un KNN avec pour hyper-paramètre K=1. En effet, le manque de données à nos dispositions (notre scapper a été fonctionnel tardivement combiné à des soucis de trou dans les mesures) nous oblige à utiliser une valeur de K relativement faible.
 
-```text
-{'comportment': {3: {
-    'window': [155, 127, 105, 131, 236, 46, 58, 95, 315, 10, 122, 109, 269, 359, 36, 35, 129, 210, 21, 356, 93, 125, 89,
+Le modèle développé ici est fonctionnel et a été testé avec succès sur la tortue cyclique numéro 7 de la course "small". Nénamoins en raison d'un manque de temps, le modèle complet n'a pas été réentrainé sur l'intégralité des données et les tortues lunatiques ne sont donc pas détecté par l'algorithme car il considère une trop faible pèriode temporelle.
+
+### Le fichier model.json
+Le fichier model.json regroupe les comportements de chaque tortue ainsi que les paramètres permettant de recalculer leur positions.
+
+
+Voici un exemple de celui-ci : 
+```json
+...
+        {
+            "Tortoise": 1,
+            "class": 2,
+            "params": {
+                "window": [51, 122, 138, 130, 350, 302, 278, 84, 248, 294, 173, 25, 336, 9, 129, 297, 40, 386, 5, 309, 257, 178, 310, 301, 52, 199, 4, 191, 67, 222, 179, 106, 287, 329, 22, 180, 389, 29, 69, 277, 128, 270, 249, 162, 15, 319, 92, 381, 349, 200, 252, 275, 90, 303, 299, 74, 195, 227, 355, 274, 320 ]}
+        },
+        {
+            "Tortoise": 2,
+            "class": 1,
+            "params": {
+                "initial": 31,
+                "rhythm": 10,
+                "extra_params": {
+                    "qualite": 0.863381793014835,
+                    "temperature": 20.980595977843635
+                }
+            }
+        },
+...
+```
+
+De plus à titre d'exemple, voilà le résultat sur un entrainement sur une tortue lunatique : 
+
+```json
+{ "Tortoise": 2,
+  "comportment": {3: {
+    "window": [155, 127, 105, 131, 236, 46, 58, 95, 315, 10, 122, 109, 269, 359, 36, 35, 129, 210, 21, 356, 93, 125, 89,
                322, 321, 355, 158, 337, 140, 141, 367, 197, 324, 280, 394, 207, 350, 304, 206, 264, 132, 88, 265, 59,
                69, 77, 166, 57, 308, 302, 28, 385, 245, 67, 261, 84, 195, 81, 83, 370, 235, 137, 358, 76, 24, 218, 202,
                379, 284, 52, 116, 285, 30, 342, 119, 249, 271, 6, 39, 96, 123, 48, 283, 383, 178, 19]},
-                 2: {'initial': 340, 'rhythm': 28}},
- 'intervals': [{'class': 3, 'temperature': 34.946879334390516, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 36.47599833046669, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 38.19524228402687, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 39.333480263868815, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 40.0, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 38.83047751068756, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 37.46443577542516, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 36.68533377957218, 'quality': 0.7990277777925706},
-               {'class': 3, 'temperature': 36.454067353799296, 'quality': 0.11494012255509778},
-               {'class': 2, 'temperature': 35.93714055374335, 'quality': 0.11494012255509778},
-               {'class': 2, 'temperature': 33.969667509232714, 'quality': 0.11494012255509778}]}
+                 2: {"initial": 340, "rhythm": 28}},
+ "intervals": [{"class": 3, "temperature": 34.946879334390516, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 36.47599833046669, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 38.19524228402687, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 39.333480263868815, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 40.0, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 38.83047751068756, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 37.46443577542516, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 36.68533377957218, "quality": 0.7990277777925706},
+               {"class": 3, "temperature": 36.454067353799296, "quality": 0.11494012255509778},
+               {"class": 2, "temperature": 35.93714055374335, "quality": 0.11494012255509778},
+               {"class": 2, "temperature": 33.969667509232714, "quality": 0.11494012255509778}]}
 ```
 
 
 
 ## Le script de prédiction
 
+Le script de prédiction se base sur le fichier model.json et recalcule à partir des différents paramètres la position de chaque tortue. 
 
-[A faire]
+Dans le cas des tortues lunatiques, il récupère l'ensemble des classes associés à un couple température / qualité. 
+Il calcul ensuite un vecteur de distance (basé sur la norme 2). C'est la norme qui semble évidente pour ce projet
+mais qui pourrait sûrement être ajusté par la suite en fonction des résultats sur le set de donnée complet. Une fois le vecteur de distance trouvé,
+on calcul ces K maximaux et on en déduit la classe associé au couple de température / qualité souhaité. 
+
+
