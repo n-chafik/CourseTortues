@@ -1,6 +1,7 @@
 import json
 import argparse
 
+
 def prediction2(Type, top, pos1, pos2, pos3, temp, quality, delta_top, parameters):
     if Type == 0:
         speed = parameters["step"]
@@ -13,7 +14,7 @@ def prediction2(Type, top, pos1, pos2, pos3, temp, quality, delta_top, parameter
         window = parameters["window"]
         return prediction_cyclic(window, pos1, pos2, pos3, delta_top)
     if Type == 3:
-        return
+        return prediction_lunatic(pos1, pos2, pos3, temp, quality, delta_top, parameters)
 
 
 def prediction_regular(pos1, delta_top, speed):
@@ -48,8 +49,32 @@ def prediction_tired(initial, rhythm, pos1, pos2, pos3, delta_top):
     return
 
 
-def prediction_lunatic():
-    return
+def prediction_lunatic(pos1, pos2, pos3, temp, quality, delta_top, parameters):
+    # We use a classic measure distance
+    def quadratic_distance(temperature_a, quality_a, temperature_b, quality_b):
+        return (temperature_a - temperature_b) ** 2 + (quality_a - quality_b) ** 2
+
+    # We compute each distances to calcul after nearest neighbors
+    def distances_vector(dataset, temperature_input, quality_input):
+        distances = []
+        for j in range(len(dataset)):
+            temp = dataset[j]["temperature"]
+            qual = dataset[j]["quality"]
+            distances.append(quadratic_distance(temp, qual, temperature_input, quality_input))
+        return distances
+
+    distances = distances_vector(parameters["intervals"], temp, quality)
+
+    # Because we don't have a lot of data, we implement the KNN with K = 1
+    min_distance = 10e10
+    comportment = 0
+    for i in range(len(distances)):
+        if distances[i] <= min_distance:
+            min_distance = distances[i]
+            # Here we determined the exact comportment of the tortoise
+            comportment = parameters["intervals"]["class"][i]
+
+    return prediction2(comportment, pos1, pos2, pos3, temp, quality, delta_top, parameters["comportment"][comportment])
 
 
 def prediction(course, id, top, pos1, pos2, pos3, temp, quality, delta_top):

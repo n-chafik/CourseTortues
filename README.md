@@ -126,7 +126,27 @@ Ensuite, il faut déterminer quel comportement la tortue adopte en fonction de l
 
 - Régression logistique : C'est un modèle de régression binomiale qui va découper l'espace selon des hyper-plans (qui seront ici des droites) et va ainsi permettre de déterminer des zones pour chaque modèle de comportement.
 
+### Le fichier model.json
 
+```text
+{'comportment': {3: {
+    'window': [155, 127, 105, 131, 236, 46, 58, 95, 315, 10, 122, 109, 269, 359, 36, 35, 129, 210, 21, 356, 93, 125, 89,
+               322, 321, 355, 158, 337, 140, 141, 367, 197, 324, 280, 394, 207, 350, 304, 206, 264, 132, 88, 265, 59,
+               69, 77, 166, 57, 308, 302, 28, 385, 245, 67, 261, 84, 195, 81, 83, 370, 235, 137, 358, 76, 24, 218, 202,
+               379, 284, 52, 116, 285, 30, 342, 119, 249, 271, 6, 39, 96, 123, 48, 283, 383, 178, 19]},
+                 2: {'initial': 340, 'rhythm': 28}},
+ 'intervals': [{'class': 3, 'temperature': 34.946879334390516, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 36.47599833046669, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 38.19524228402687, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 39.333480263868815, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 40.0, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 38.83047751068756, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 37.46443577542516, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 36.68533377957218, 'quality': 0.7990277777925706},
+               {'class': 3, 'temperature': 36.454067353799296, 'quality': 0.11494012255509778},
+               {'class': 2, 'temperature': 35.93714055374335, 'quality': 0.11494012255509778},
+               {'class': 2, 'temperature': 33.969667509232714, 'quality': 0.11494012255509778}]}
+```
 
 
 

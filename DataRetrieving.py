@@ -40,7 +40,7 @@ def retrieving_infos(n):
                     i -= 1
                     break
             i += 1
-            time.sleep(1)
+            time.sleep(0.3)
             # This sleep time depends of the internet connection and the computer.
             # On slow computer reduce it.
         except Exception as e:
@@ -48,4 +48,4 @@ def retrieving_infos(n):
 
 
 if __name__ == "__main__":
-    retrieving_infos(2 * 20 * 60)
+    retrieving_infos(1 * 20 * 60)
