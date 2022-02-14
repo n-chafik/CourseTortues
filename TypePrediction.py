@@ -1,7 +1,6 @@
 import json
 import os
 import os.path
-import matplotlib.pyplot as plt
 
 
 # Function that returns the speeds recorded between every two Tops
@@ -32,23 +31,6 @@ def table_speed(id_tortoise, type_of_race="tiny"):
         list_speeds.append(list_positions[i + 1] - list_positions[i])
 
     return list_speeds, list_quality, list_temperature
-
-
-def plot_tortoise(id_tortoise, type_of_race):
-    (speed, quality, temperatures) = table_speed(id_tortoise, type_of_race)
-
-    quality = [x * 100 for x in quality]
-
-    plt.plot(speed, label="Vitesse")
-    plt.plot(quality, label="Qualité (en %)")
-    plt.plot(temperatures, label="Température")
-    plt.title('Tortoise {} in the {} race ({} measures)'.format(id_tortoise, type_of_race, len(speed)))
-    plt.xlabel('Temps')
-    plt.ylabel('Vitesse')
-    plt.legend(loc="upper left")
-    plt.figure(figsize=(30, 15), dpi=300)
-
-    plt.show()
 
 
 def is_regular(speed):
