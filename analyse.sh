@@ -1,2 +1,2 @@
-python3 ./DataRetrieving.py
-python3 ./TypePrediction.py
+python ./DataRetrieving.py
+python ./TypePrediction.py
