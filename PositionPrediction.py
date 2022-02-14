@@ -36,13 +36,35 @@ def prediction_cyclic(window, pos1, pos2, pos3, delta_top):
 
 def prediction_tired(initial, rhythm, pos1, pos2, pos3, delta_top):
     speeds = [0]
-    if initial % rhythm > 0:
-        #for i in range(initial / rhythm):
-        #    speeds.append((i + 1) * rhythm)
+    if initial % rhythm == 0:
+        for i in range(initial / rhythm):
+            speeds.append(rhythm * (i+1))
+        for i in range(initial/rhythm, 1, -1):
+            speeds.append(rhythm * (i-1))
+    else:
+        for i in range(int(initial / rhythm)):
+            speeds.append(rhythm * (i+1))
+        speeds.append(initial)
+        for i in range(1, (int(initial/rhythm))+1):
+            speeds.append(initial - (rhythm*i))
 
-        for i in range(initial):
-            speeds.append(rhythm)
-        # A complèter
+    accelerations = []
+    current_speed = 0
+    for i in range(len(speeds)):
+        if speeds[i] == pos2 - pos1:
+            current_speed = i
+            break
+
+    for i in range(delta_top):
+        accelerations.append(speeds[(current_speed + i) % len(speeds)])
+
+    return pos1 + sum(accelerations)
+
+
+
+
+
+
 
 
     return
@@ -68,4 +90,5 @@ def prediction(course, id, top, pos1, pos2, pos3, temp, quality, delta_top):
 
 
 # print(prediction("tiny", 0, 848157, 71245188, 71245272, 71245356, 24.174806498112467, 0.3100529516794682, 90293))
-print(prediction("tiny", 3, 848157, 181263227, 181263510, 181263603, 0.3100529516794682, 24.174806498112467, 92670))
+# print(prediction("tiny", 3, 848157, 181263227, 181263510, 181263603, 0.3100529516794682, 24.174806498112467, 92670))
+# print(prediction("large", 12, 847861, 160245918, 160246266, 160246584, 20.980595977843635, 0.863381793014835, 123169))

@@ -1,7 +1,6 @@
 import json
 import os
 import os.path
-import matplotlib.pyplot as plt
 
 
 # Function that returns the speeds recorded between every two Tops
@@ -31,16 +30,6 @@ def table_speed(id_tortoise, type_of_race="tiny"):
         list_speeds.append(list_positions[i + 1] - list_positions[i])
 
     return list_speeds, {"qualite": quality, "temperature": temperature}
-
-
-def plot_tortoise(id_tortoise, type_of_race):
-    speed = table_speed(id_tortoise, type_of_race)
-
-    plt.plot(speed)
-    plt.title('Tortoise {} in the {} race ({} measures)'.format(id_tortoise, type_of_race, len(speed)))
-    plt.xlabel('Distance')
-    plt.ylabel('Time')
-    plt.show()
 
 
 def is_regular(id_tortoise, type_of_race="tiny"):
@@ -120,9 +109,10 @@ def model():
                     (is_cyclic_bool, params) = is_cyclic(tortoise, Type)
                     if is_cyclic_bool:
                         data_model[Type].append({"Tortoise": tortoise, "class": 2, "params": params})
-                        (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
+
 
                     else:
+                        (is_lunatic_bool, params) = is_lunatic(tortoise, Type)
                         # if is_lunatic_bool:
                         data_model[Type].append({"Tortoise": tortoise, "class": 3, "params": params})
 
@@ -131,7 +121,4 @@ def model():
 
 
 if __name__ == "__main__":
-
     model()
-
-
